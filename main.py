@@ -1,3 +1,5 @@
+import random
+
 import discord
 from discord.ext import commands
 from discord import app_commands
@@ -14,6 +16,13 @@ intents.message_content = True
 intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
+
+def log_to_server(message, channel_name='glup-logs'):
+    guild = discord.utils.get(bot.guilds, name='globalpositioningsystem\'s server')
+    if guild:
+        channel = discord.utils.get(guild.text_channels, name=channel_name)
+        if channel:
+            bot.loop.create_task(channel.send(message))
 
 @bot.event
 async def on_ready():
@@ -41,12 +50,26 @@ async def on_message(message):
         #await message.delete()
         await message.channel.send(f'Hello, {message.author.mention}!')
 
+    # if this is a DM to the bot, send message to a specific channel in the server
+    if isinstance(message.channel, discord.DMChannel):
+        log_to_server(f'DM from {message.author}: {message.content}', channel_name='glup-responses')
+
+    rng_roll = random.randint(1, 100)
+    #log_to_server(f'Random roll: {rng_roll}', channel_name='glup-logs')
+    if rng_roll > 95:
+        await message.channel.send(f'because bread tastes better than key!!!!!!!!!!')
+
     await bot.process_commands(message)
 
 @bot.tree.command(name="ping", description="Check the bot's response time")
 async def ping(interaction: discord.Interaction):
     # Always use interaction.response.send_message for slash commands
     await interaction.response.send_message(f"Pong! {round(bot.latency * 1000)}ms")
+
+@bot.tree.command(name="glup", description="Glup command")
+async def glup(interaction: discord.Interaction):
+    # Always use interaction.response.send_message for slash commands
+    await interaction.response.send_message(f"Hello I am Glup bot!")
 
 @bot.command()
 async def assign(ctx):
@@ -69,8 +92,13 @@ async def remove(ctx):
 
 @bot.command()
 async def dm(ctx, member: discord.Member, *, message):
+    # check to see if dm disabled role is assigned
+    dm_disabled_role = discord.utils.get(ctx.guild.roles, name='DM Disabled')
+    if dm_disabled_role in member.roles:
+        await ctx.send(f'User has DMs disabled.')
+        return
     await member.send(message)
-    await ctx.send(f'Sent a DM to {member.mention}')
+    await ctx.send(f'Sent a DM to {member.name}')
 
 @bot.command()
 async def poll(ctx, *, question):
@@ -78,6 +106,7 @@ async def poll(ctx, *, question):
     poll_message = await ctx.send(embed=embed)
     await poll_message.add_reaction('👍')
     await poll_message.add_reaction('👎')
+
 
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
