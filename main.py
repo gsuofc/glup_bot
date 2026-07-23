@@ -71,6 +71,16 @@ async def glup(interaction: discord.Interaction):
     # Always use interaction.response.send_message for slash commands
     await interaction.response.send_message(f"Hello I am Glup bot!")
 
+@bot.tree.command(name="neofetch", description="Get system information")
+async def neofetch(interaction: discord.Interaction):
+    # Run the neofetch command and capture its output
+    import subprocess
+    result = subprocess.run(['neofetch', '--stdout'], capture_output=True, text=True)
+    output = result.stdout
+    # Send as embed to avoid message length issues
+    embed = discord.Embed(title="System Information", description=f"```\n{output}\n```", color=0x00ff00)
+    await interaction.response.send_message(embed=embed)
+
 @bot.command()
 async def assign(ctx):
     # Check if the role exists in the guild
