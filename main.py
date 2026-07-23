@@ -107,8 +107,12 @@ async def dm(ctx, member: discord.Member, *, message):
     if dm_disabled_role in member.roles:
         await ctx.send(f'User has DMs disabled.')
         return
-    await member.send(message)
-    await ctx.send(f'Sent a DM to {member.name}')
+    #check to see if the bot can send a DM to the user
+    try:
+        await member.send(message)
+        await ctx.send(f'Sent a DM to {member.name}')
+    except discord.Forbidden:
+        await ctx.send(f'Could not send a DM to {member.name}. They may have DMs disabled.')
 
 @bot.command()
 async def poll(ctx, *, question):
