@@ -20,8 +20,11 @@ intents.members = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 all_messages = None
-with open('media_links.json', 'r') as file:
-    all_messages = json.load(file)
+try:
+    with open('images/media_links.json', 'r') as file:
+        all_messages = json.load(file)
+except FileNotFoundError:
+    print("Error: media_links.json not found.")
 
 def log_to_server(message, channel_name='glup-logs'):
     guild = discord.utils.get(bot.guilds, name='globalpositioningsystem\'s server')
