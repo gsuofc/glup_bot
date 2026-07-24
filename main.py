@@ -111,8 +111,14 @@ async def random_image(interaction: discord.Interaction):
         await interaction.response.send_message("No messages available.", ephemeral=True)
         return
     message = random.choice(all_messages)
-    embed = discord.Embed(title="Random Image", description=f"Image by {message['author']}\n Link: {message['post']}", color=0x00ff00)
-    await interaction.response.send_message(message['url'], embed=embed)
+    embed = discord.Embed(
+        title="Image from Random",
+        description=f"Image by {message['author']}\n Link: {message['post']}",
+        color=0x00ff00
+    )
+    embed.set_image(url=message["url"])
+
+    await interaction.response.send_message(embed=embed)
 
 
 @bot.command()
