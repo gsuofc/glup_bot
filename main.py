@@ -1,4 +1,5 @@
 import random
+import sys
 
 import discord
 from discord.ext import commands
@@ -125,6 +126,13 @@ async def dm(ctx, member: discord.Member, *, message):
         await ctx.send(f'Sent a DM to {member.name}')
     except discord.Forbidden:
         await ctx.send(f'Could not send a DM to {member.name}. They may have DMs disabled.')
+
+@bot.command()
+@commands.is_owner()
+async def stop(ctx):
+    await ctx.send("Shutting down...")
+    await bot.close()
+    sys.exit(0)
 
 @bot.command()
 async def poll(ctx, *, question):
