@@ -1,8 +1,11 @@
+from email.mime import message
 import json
 import random
 import sys
+from urllib.parse import urlparse
 
 import discord
+from discord import channel
 from discord.ext import commands
 from discord import app_commands
 import logging
@@ -111,9 +114,16 @@ async def random_image(interaction: discord.Interaction):
         await interaction.response.send_message("No messages available.", ephemeral=True)
         return
     message = random.choice(all_messages)
+
+    # Deal with links breaking
+    message_id = int(urlparse(message['post']).path.rstrip("/").split("/")[-1])
+    message_obj = await channel.fetch_message(message_id)
+
+    jump_url = message_obj.jump_url
+
     embed = discord.Embed(
         title="Image from Random",
-        description=f"Image by {message['author']}\n Link: {message['post']}",
+        description=f"Image by {message['author']}\n Link: {jump_url}",
         color=0x00ff00
     )
     embed.set_image(url=message["url"])
