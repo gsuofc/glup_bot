@@ -116,7 +116,16 @@ async def random_image(interaction: discord.Interaction):
     message = random.choice(all_messages)
 
     # Deal with links breaking
-    message_id = int(urlparse(message['post']).path.rstrip("/").split("/")[-1])
+    _, guild_id, channel_id, message_id = urlparse(message['post']).path.strip("/").split("/")
+
+    guild_id = int(guild_id)
+    channel_id = int(channel_id)
+    message_id = int(message_id)
+
+    channel = bot.get_channel(channel_id)
+    if channel is None:
+        channel = await bot.fetch_channel(channel_id)
+        
     message_obj = await channel.fetch_message(message_id)
 
     jump_url = message_obj.jump_url
