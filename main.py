@@ -1,3 +1,4 @@
+import json
 import random
 import sys
 
@@ -18,6 +19,10 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+all_messages = None
+with open('media_links.json', 'r') as file:
+    all_messages = json.load(file)
+
 def log_to_server(message, channel_name='glup-logs'):
     guild = discord.utils.get(bot.guilds, name='globalpositioningsystem\'s server')
     if guild:
@@ -33,6 +38,7 @@ async def on_ready():
         # Syncing registers your slash commands with Discord globally
         synced = await bot.tree.sync()
         print(f"Successfully synced {len(synced)} application command(s).")
+        log_to_server(f"Startup complete! Successfully synced {len(synced)} application command(s).", channel_name='glup-logs')
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 
@@ -94,6 +100,23 @@ async def neofetch(interaction: discord.Interaction):
     # Send as embed to avoid message length issues
     embed = discord.Embed(title="System Information", description=f"```\n{output}\n```", color=0x00ff00)
     await interaction.response.send_message(embed=embed)
+
+@bot.tree.command(name="random_image", description="Get a random image from over 4000+ images")
+async def random_image(interaction: discord.Interaction):
+    global all_messages
+    if not all_messages:
+        await interaction.response.send_message("No messages available.", ephemeral=True)
+        return
+    message = random.choice(all_messages)
+    """"url": "https://cdn.discordapp.com/attachments/1067488613736136755/1067488698557550632/D0483895-64F0-4573-B618-621A19796834.jpg",
+        "author": "globalpositioningsystem",
+        "user_id": "1020049283992539226",
+        "post": "https://discord.com/channels/1020050395294351421/1067488613736136755/1067488699476086814"
+        """
+    embed = discord.Embed(title="Poll", description=f"Image by {message['author']}\n Link: {message['post']}", color=0x00ff00)
+    embed.set_image(url=message['url'])
+    await interaction.response.send_message(embed=embed)
+
 
 @bot.command()
 async def assign(ctx):
