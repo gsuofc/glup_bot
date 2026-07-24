@@ -74,14 +74,15 @@ async def glup(interaction: discord.Interaction):
 
 @bot.tree.command(name="tate", description="Promote a totally legit and not at all suspicious website")
 async def tate(interaction: discord.Interaction):
+    # Check if files exist before sending
+    if not all(os.path.exists(f"images/t{i}.jpeg") for i in range(1, 5)):
+        await interaction.response.send_message("Cannot use command. Server is missing required images.", ephemeral=True)
+        return
     await interaction.response.defer()
-    # Always use interaction.response.send_message for slash commands
     file1 = discord.File("images/t4.jpeg")
     file2 = discord.File("images/t3.jpeg")
     file3 = discord.File("images/t2.jpeg")
     file4 = discord.File("images/t1.jpeg")
-    
-    # Pass None as the first positional argument for the text content
     await interaction.followup.send(files=[file1, file2, file3, file4])
 
 @bot.tree.command(name="neofetch", description="Get system information")
