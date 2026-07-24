@@ -116,9 +116,16 @@ async def random_image(interaction: discord.Interaction):
         description=f"Image by {message['author']}\n Link: {message['post']}",
         color=0x00ff00
     )
-    embed.set_image(url=message["url"])
+    url = message["url"]
 
-    await interaction.response.send_message(embed=embed)
+    if url.lower().endswith((".mp4", ".webm", ".mov")):
+        await interaction.response.send_message(
+                    content=url,
+                    embed=embed
+                )
+    else:
+        embed.set_image(url=url)
+        await interaction.response.send_message(embed=embed)
 
 
 @bot.command()
