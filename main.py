@@ -110,7 +110,16 @@ async def random_image(interaction: discord.Interaction):
     if not all_messages:
         await interaction.response.send_message("No messages available.", ephemeral=True)
         return
-    message = random.choice(all_messages)
+
+    #reroll if a video is selected, since videos are not supported in embeds
+    while True:
+        message = random.choice(all_messages)
+        url = message["url"]
+
+        # Accept only images
+        if not url.lower().endswith((".mp4", ".webm", ".mov")):
+            break
+    
     embed = discord.Embed(
         title="Image from Random",
         description=f"Image by {message['author']}\n Link: {message['post']}",
@@ -118,14 +127,8 @@ async def random_image(interaction: discord.Interaction):
     )
     url = message["url"]
 
-    if url.lower().endswith((".mp4", ".webm", ".mov")):
-        await interaction.response.send_message(
-                    content=url,
-                    embed=embed
-                )
-    else:
-        embed.set_image(url=url)
-        await interaction.response.send_message(embed=embed)
+    embed.set_image(url=url)
+    await interaction.response.send_message(embed=embed)
 
 
 @bot.command()
