@@ -172,7 +172,7 @@ async def get_fish_records():
                 FROM user_fish uf2
                 WHERE uf2.fish_id = f.fish_id
             )
-            ORDER BY f.fish_name;
+            ORDER BY f.fish_id;
         """)
 
         return await cursor.fetchall()
