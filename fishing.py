@@ -202,3 +202,17 @@ def convert_roll_to_weight(roll,average_weight):
     normal = NormalDist()
     z = normal.inv_cdf(roll)
     return average_weight + z * sigma
+
+import colorsys
+
+def get_discord_embed_color(val, min_val, max_val):
+    # Normalize the value between 0.0 and 1.0
+    norm = (val - min_val) / (max_val - min_val)
+    norm = max(0.0, min(1.0, norm))
+
+    # Convert hue to rgb
+    hue = norm * 0.8  
+    r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
+    r_int, g_int, b_int = int(r * 255), int(g * 255), int(b * 255)
+    
+    return (r_int << 16) + (g_int << 8) + b_int

@@ -366,7 +366,7 @@ async def fish(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Caught Fish",
         description=f"Fished {fish_rolled["fish_name"]}!\nSize: {size:.3f}\nRank: {rank}",
-        color=discord.Color.red()
+        color=fishing.get_discord_embed_color(rarity_roll,0,1)
     )
     
     # 3. Reference the attached file matching the filename exactly
