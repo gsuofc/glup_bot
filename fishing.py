@@ -153,6 +153,29 @@ async def user_update_catches(discord_user_id,fishes_caught):
         await db.execute("UPDATE user_profiles SET total_fish = ? WHERE user_id = ?", (fishes_caught,discord_user_id))
         await db.commit()
 
+async def get_fish_records():
+    async with aiosqlite.connect(DB_FILE) as db:
+        db.row_factory = aiosqlite.Row
+        cursor = await db.execute("""
+            SELECT
+                f.fish_name,
+                f.fish_id,
+                up.user_discord_id,
+                uf.largest_roll
+            FROM fishes f
+            JOIN user_fish uf
+                ON f.fish_id = uf.fish_id
+            JOIN user_profiles up
+                ON uf.user_id = up.user_id
+            WHERE uf.largest_roll = (
+                SELECT MAX(uf2.largest_roll)
+                FROM user_fish uf2
+                WHERE uf2.fish_id = f.fish_id
+            )
+            ORDER BY f.fish_name;
+        """)
+
+        return await cursor.fetchall()
 
 class fish_roller:
     def __init__(self):

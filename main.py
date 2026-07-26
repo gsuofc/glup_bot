@@ -430,6 +430,31 @@ async def fish_profile(interaction: discord.Interaction):
 
     await interaction.response.send_message(embed=embed)
     
+@bot.tree.command(name="fish_leaderboards", description="See who caught the biggest fishes")
+async def fish_leaderboards(interaction: discord.Interaction):
+    records = await fishing.get_fish_records()
+
+    embed = discord.Embed(title="Fish Leaderboards")
+    per_fish_rank_message = ""
+
+    for record in records:
+        user = await bot.fetch_user(record['user_discord_id'])
+        fish_id = record["fish_id"]
+        fish = await fishing.get_fish_by_id(fish_id)
+        largest_roll = record["largest_roll"]
+        largest_size = 0
+        if fish:
+            largest_size = fishing.convert_roll_to_weight(largest_roll,fish["ave_size"])
+        largest_rank = fishing.convert_roll_to_rank(largest_roll)
+        per_fish_rank_message += f"{record["fish_name"]}: <@{user.name}> — {largest_size:.3f} ({largest_rank})\n"
+
+    embed.add_field(
+        name="Best Catches",
+        value=per_fish_rank_message,
+        inline=False
+    )
+
+    await interaction.response.send_message(embed=embed)
 
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
