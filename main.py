@@ -336,6 +336,10 @@ async def fish(interaction: discord.Interaction):
     # We have a fish, now we roll for rarity
     #rarity_roll = random.random()
     rarity_roll = secrets.SystemRandom().random() # Using better random because random.random() feels like it is too generous
+    # patch out really small rolls (they get rerolled)
+    if rarity_roll<0.001:
+        rarity_roll*=500 # Small rolls can still happen but it needs to be *really* small
+
     rank = fishing.convert_roll_to_rank(rarity_roll)
     size = fishing.convert_roll_to_weight(rarity_roll,fish_rolled["ave_size"])
 
