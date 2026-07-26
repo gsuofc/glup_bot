@@ -182,13 +182,17 @@ class fish_roller:
 
 # Non DB Helper functions
 def convert_roll_to_rank(roll):
-    if roll < 0.40:
+    if roll < 0.005:
+        return "F"
+    elif roll < 0.02:
+        return "E"
+    elif roll < 0.40:
         return "D"
     elif roll < 0.70:
         return "C"
-    elif roll < 0.97:
+    elif roll < 0.98:
         return "B"
-    elif roll < 0.99:
+    elif roll < 0.995:
         return "A"
     else:
         return "A+"
