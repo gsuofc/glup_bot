@@ -186,7 +186,7 @@ def convert_roll_to_rank(roll):
         return "D"
     elif roll < 0.70:
         return "C"
-    elif roll < 0.95:
+    elif roll < 0.97:
         return "B"
     elif roll < 0.99:
         return "A"
