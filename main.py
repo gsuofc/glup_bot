@@ -201,11 +201,6 @@ Fishing Minigame Commands
 
 @bot.command()
 @commands.is_owner()
-async def fish_test(ctx):
-    await ctx.send("Starting fishing minigame test...")
-
-@bot.command()
-@commands.is_owner()
 async def get_all_fishes(ctx):
     #get fishes + ids for debugging
     fishes = await fishing.get_all_fishes()
@@ -305,7 +300,6 @@ async def add_fish(interaction: discord.Interaction, emoji_string: str, fish_nam
 
 
 @bot.tree.command(name="fish", description="Fish for Discord Emotes!")
-@is_bot_owner() # Remove when ready to release
 async def fish(interaction: discord.Interaction):
     await interaction.response.defer()
 
@@ -381,7 +375,6 @@ async def fish(interaction: discord.Interaction):
 
 @bot.tree.command(name="change_island", description="Change what island you are fishing at")
 @app_commands.describe(island_name="Name of the island to fish at")
-@is_bot_owner() # Remove when ready to release
 async def fish(interaction: discord.Interaction,  island_name: str):
     # First, check to see if the user has a profile
     user_profile = await fishing.get_user_profile(interaction.user.id)
@@ -405,7 +398,6 @@ async def fish(interaction: discord.Interaction,  island_name: str):
 
 
 @bot.tree.command(name="fish_profile", description="See what fish you caught")
-@is_bot_owner() # Remove when ready to release
 async def fish_profile(interaction: discord.Interaction):
     user_profile = await fishing.get_user_profile(interaction.user.id)
     if not user_profile:
