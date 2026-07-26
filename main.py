@@ -432,6 +432,7 @@ async def fish_profile(interaction: discord.Interaction):
     
 @bot.tree.command(name="fish_leaderboards", description="See who caught the biggest fishes")
 async def fish_leaderboards(interaction: discord.Interaction):
+    await interaction.response.defer()
     records = await fishing.get_fish_records()
 
     embed = discord.Embed(title="Fish Leaderboards")
@@ -454,7 +455,7 @@ async def fish_leaderboards(interaction: discord.Interaction):
         inline=False
     )
 
-    await interaction.response.send_message(embed=embed)
+    await interaction.followup.send(embed=embed)
 
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
