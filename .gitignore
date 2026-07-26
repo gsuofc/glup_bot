@@ -2,3 +2,5 @@
 discord.log
 /images
 .DS_Store
+/fishing_data
+*.pyc
