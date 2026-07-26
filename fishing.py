@@ -210,8 +210,12 @@ def get_discord_embed_color(val, min_val, max_val):
     norm = (val - min_val) / (max_val - min_val)
     norm = max(0.0, min(1.0, norm))
 
+    if norm <= 0.98:
+        hue = (norm / 0.98) * 0.65
+    else:
+        hue = 0.65 + ((norm - 0.98) / 0.02) * 0.17
+
     # Convert hue to rgb
-    hue = norm * 0.8  
     r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
     r_int, g_int, b_int = int(r * 255), int(g * 255), int(b * 255)
     
