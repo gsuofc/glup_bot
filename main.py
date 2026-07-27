@@ -354,7 +354,7 @@ async def fish(interaction: discord.Interaction):
 
     last_biggest_rank = fishing.convert_roll_to_rank(last_biggest_weight)
     last_biggest_size = fishing.convert_roll_to_weight(last_biggest_weight,fish_rolled["ave_size"])
-    biggest_size_message = f"Biggest Catch: {last_biggest_size} ({last_biggest_rank})"
+    biggest_size_message = f"Biggest Catch: {last_biggest_size:.3f} ({last_biggest_rank})"
 
     new_quantity = last_quantity + 1
     new_biggest_weight = last_biggest_weight
