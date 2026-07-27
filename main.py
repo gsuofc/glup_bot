@@ -352,10 +352,15 @@ async def fish(interaction: discord.Interaction):
     last_biggest_weight = fishes_caught_by_user["largest_roll"]
     last_quantity = fishes_caught_by_user["quantity"]
 
+    last_biggest_rank = fishing.convert_roll_to_rank(last_biggest_weight)
+    last_biggest_size = fishing.convert_roll_to_weight(last_biggest_weight,fish_rolled["ave_size"])
+    biggest_size_message = f"Biggest Catch: {last_biggest_size} ({last_biggest_rank})"
+
     new_quantity = last_quantity + 1
     new_biggest_weight = last_biggest_weight
     if rarity_roll > last_biggest_weight:
         new_biggest_weight = rarity_roll
+        biggest_size_message = "New Largest Catch!"
 
     await fishing.update_user_fish(db_id, fish_id,new_biggest_weight,new_quantity)
 
@@ -369,7 +374,7 @@ async def fish(interaction: discord.Interaction):
     file = discord.File(file_name, filename="image.png")
     embed = discord.Embed(
         title="Caught Fish",
-        description=f"Fished {fish_rolled["fish_name"]}!\nSize: {size:.3f}\nRank: {rank}",
+        description=f"Fished {fish_rolled["fish_name"]}!\nSize: {size:.3f}\nRank: {rank}\n{biggest_size_message}",
         color=fishing.get_discord_embed_color(rarity_roll,0,1)
     )
     
