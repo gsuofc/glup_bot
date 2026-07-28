@@ -1,6 +1,9 @@
 CREATE TABLE IF NOT EXISTS islands (
     island_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL
+    name TEXT NOT NULL,
+    unlisted INTEGER NOT NULL DEFAULT 0,
+    required_b_catches INTEGER NOT NULL DEFAULT 0,
+    required_a_catches INTEGER NOT NULL DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS fishes (

@@ -234,6 +234,7 @@ async def fish_sql(ctx, *, sql):
         await ctx.send(f"```{text[:1900]}```")
     else:
         await ctx.send(f"```{text}```")
+
 @bot.command()
 @commands.is_owner()
 async def get_all_islands(ctx):
@@ -411,13 +412,43 @@ async def fish(interaction: discord.Interaction,  island_name: str):
         islands = await fishing.get_all_islands()
         message = ""
         for island in islands:
-            message += f"- {island[1]}\n"
+            island_name = island["name"]
+            required_b_catches = island["required_b_catches"]
+            required_a_catches = island["required_a_catches"]
+            unlisted = island["unlisted"]
+            if unlisted==0:
+                message += f"{island_name} "
+                if required_b_catches>0 or required_a_catches>0:
+                    message+=f"(Requirements: {required_b_catches}xB, {required_a_catches}xA)"
+                message += "\n"
 
         await interaction.response.send_message(f"Island does not exist! Valid choices:\n{message}")
         return
-    else: 
-        await fishing.user_visit_island(user_profile["user_discord_id"],island_choice["island_id"])
-        await interaction.response.send_message(f"Changed to {island_choice["name"]}")
+
+    # Determine if you have caught enough B and A ranks
+    user_b_catches = 0
+    user_a_catches = 0
+
+    fish_caught_by_user = await fishing.get_user_fish(user_profile["user_id"])
+    for fish_stat in fish_caught_by_user:
+        largest_roll = fish_stat["largest_roll"]
+        largest_rank = fishing.convert_roll_to_rank(largest_roll)
+
+        if "B" in largest_rank.capitalize():
+            user_b_catches+=1
+        elif "A" in largest_rank.capitalize():
+            user_a_catches+=1
+
+    required_b_catches = island_choice["required_b_catches"]
+    required_a_catches = island_choice["required_a_catches"]
+
+    if user_b_catches<required_b_catches or user_a_catches<required_a_catches:
+        await interaction.response.send_message(f"You do not meet the requirements to fish at this island!\n\
+                                                B or better catches: {user_b_catches}/{required_b_catches}\n\
+                                                A or better catches: {user_a_catches}/{required_a_catches}\n")
+    
+    await fishing.user_visit_island(user_profile["user_discord_id"],island_choice["island_id"])
+    await interaction.response.send_message(f"Changed to {island_choice["name"]}")
 
 
 @bot.tree.command(name="fish_profile", description="See what fish you caught")
