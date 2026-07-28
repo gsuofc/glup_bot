@@ -495,7 +495,7 @@ async def fish_leaderboards(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Fish Leaderboards",
         description=per_fish_rank_message,
-        inline=False
+        color=discord.Color.blue()
     )
 
     """)
