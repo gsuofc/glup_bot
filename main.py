@@ -379,10 +379,7 @@ async def fish(interaction: discord.Interaction):
         color=fishing.get_discord_embed_color(rarity_roll,0,1)
     )
     
-    # 3. Reference the attached file matching the filename exactly
     embed.set_image(url="attachment://image.png")
-    
-    # 4. You MUST send BOTH the file and the embed together
     await interaction.followup.send(file=file, embed=embed)
 
 @bot.tree.command(name="change_island", description="Change what island you are fishing at")
@@ -462,6 +459,44 @@ async def fish_leaderboards(interaction: discord.Interaction):
     )
 
     await interaction.followup.send(embed=embed)
+
+@bot.tree.command(name="fake_fish", description="Simulates a fish without actually counting it")
+@app_commands.describe(island_id="Island ID number", fish_roll="Roll for fish", rarity_roll="Rarity roll for fish")
+async def add_fish(interaction: discord.Interaction, island_id: int, fish_roll: float, rarity_roll: float):
+    await interaction.response.defer()
+    island = await fishing.get_island_by_id(island_id)
+    if not island:
+        await interaction.followup.send(f"Invalid Island! {island_id} is not an island")
+        return
+
+    # We are now at an island! Get all fish at the island and construct a table of odds based on weights
+    fishes_for_island = await fishing.get_fish_with_island(island[0])
+    fish_odds_table = fishing.fish_roller()
+    for fish_id in fishes_for_island:
+        fish = await fishing.get_fish_by_id(fish_id)
+        fish_odds_table.add_fish(fish,fish["rarity"])
+
+    (fish_rolled,odds) = fish_odds_table.get_fish_using_roll(fish_roll)
+    fish_id = fish_rolled["fish_id"]
+
+    # Fish and rarity rolls are done as args
+
+    rank = fishing.convert_roll_to_rank(rarity_roll)
+    size = fishing.convert_roll_to_weight(rarity_roll,fish_rolled["ave_size"])
+
+    file_name = fish_rolled["emote_file"]
+    file = discord.File(file_name, filename="image.png")
+    embed = discord.Embed(
+        title="Simulated Fish",
+        description=f"Simulation rolled {fish_rolled["fish_name"]}!\nSize: {size:.3f}\nRank: {rank}\nNote: This will not be counted as to your profile",
+        color=fishing.get_discord_embed_color(rarity_roll,0,1)
+    )
+    
+    embed.set_image(url="attachment://image.png")
+    await interaction.followup.send(file=file, embed=embed)
+
+
+
 
 
 bot.run(token, log_handler=handler, log_level=logging.DEBUG)
