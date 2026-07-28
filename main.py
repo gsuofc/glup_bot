@@ -438,14 +438,13 @@ async def fish(interaction: discord.Interaction,  island_name: str):
             user_b_catches+=1
         elif "A" in largest_rank.capitalize():
             user_a_catches+=1
+            user_b_catches+=1
 
     required_b_catches = island_choice["required_b_catches"]
     required_a_catches = island_choice["required_a_catches"]
 
     if user_b_catches<required_b_catches or user_a_catches<required_a_catches:
-        await interaction.response.send_message(f"You do not meet the requirements to fish at this island!\n\
-                                                B or better catches: {user_b_catches}/{required_b_catches}\n\
-                                                A or better catches: {user_a_catches}/{required_a_catches}\n")
+        await interaction.response.send_message(f"You do not meet the requirements to fish at this island!\nB or better catches: {user_b_catches}/{required_b_catches}\nA or better catches: {user_a_catches}/{required_a_catches}\n")
     
     await fishing.user_visit_island(user_profile["user_discord_id"],island_choice["island_id"])
     await interaction.response.send_message(f"Changed to {island_choice["name"]}")
