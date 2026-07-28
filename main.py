@@ -343,7 +343,7 @@ async def fish(interaction: discord.Interaction):
         fish = await fishing.get_fish_by_id(fish_id)
         fish_odds_table.add_fish(fish,fish["rarity"])
 
-    fish_roll = random.random()
+    fish_roll = secrets.SystemRandom().random()
 
     (fish_rolled,odds) = fish_odds_table.get_fish_using_roll(fish_roll)
     fish_id = fish_rolled["fish_id"]
