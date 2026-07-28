@@ -220,6 +220,20 @@ async def add_island(ctx, *, island_name):
     await fishing.create_island(island_name)
     await ctx.send(f"Island '{island_name}' added to the database.")
 
+
+@bot.command()
+@commands.is_owner()
+async def fish_sql(ctx, *, sql):
+    result = await fishing.execute_sql(sql)
+    if result is None:
+        await ctx.send("No results.")
+        return
+
+    text = str(result)
+    if len(text) > 1900:
+        await ctx.send(f"```{text[:1900]}```")
+    else:
+        await ctx.send(f"```{text}```")
 @bot.command()
 @commands.is_owner()
 async def get_all_islands(ctx):

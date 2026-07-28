@@ -25,6 +25,23 @@ async def init_db():
     except Exception as e:
         print(f"An error occurred while initializing the database: {e}")
 
+async def execute_sql(sql, params=()):
+    async with aiosqlite.connect(DB_FILE) as db:
+        cursor = await db.execute(sql, params)
+
+        # Return rows for queries
+        if sql.strip().upper().startswith(("SELECT", "PRAGMA", "WITH")):
+            rows = await cursor.fetchall()
+            await cursor.close()
+            return rows
+
+        # Commit changes for INSERT/UPDATE/DELETE/etc.
+        await db.commit()
+        changes = cursor.rowcount
+        await cursor.close()
+        return changes
+         
+
 async def create_island(name):
     async with aiosqlite.connect(DB_FILE) as db:
         await db.execute("INSERT INTO islands (name) VALUES (?)", (name,))
