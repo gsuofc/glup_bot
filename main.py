@@ -482,7 +482,6 @@ async def fish_leaderboards(interaction: discord.Interaction):
     await interaction.response.defer()
     records = await fishing.get_fish_records()
 
-    embed = discord.Embed(title="Fish Leaderboards")
     per_fish_rank_message = ""
 
     for record in records:
@@ -493,11 +492,15 @@ async def fish_leaderboards(interaction: discord.Interaction):
         largest_rank = fishing.convert_roll_to_rank(largest_roll)
         per_fish_rank_message += f"{record["fish_name"]}: <@{record['user_discord_id']}> — {largest_size:.3f} ({largest_rank})\n"
 
-    embed.add_field(
-        name="Best Catches",
+    embed = discord.Embed(
+        title="Fish Leaderboards",
         value=per_fish_rank_message,
         inline=False
     )
+
+    """)
+    embed.add_field(
+        name="Best Catches","""
 
     await interaction.followup.send(embed=embed)
 
