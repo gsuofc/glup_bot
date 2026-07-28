@@ -177,6 +177,7 @@ async def get_fish_records():
             SELECT
                 f.fish_name,
                 f.fish_id,
+                f.ave_size,
                 up.user_discord_id,
                 uf.largest_roll
             FROM fishes f
