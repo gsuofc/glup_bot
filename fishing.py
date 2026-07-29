@@ -1,5 +1,6 @@
 import os
 import random
+import secrets
 
 import aiosqlite
 import discord
@@ -261,3 +262,11 @@ def get_discord_embed_color(val, min_val, max_val):
     r_int, g_int, b_int = int(r * 255), int(g * 255), int(b * 255)
     
     return (r_int << 16) + (g_int << 8) + b_int
+
+def roll_rarity(boost=1):
+    highest_roll = 0
+    for i in range(0,boost):
+        roll = secrets.SystemRandom().random() 
+        if roll>highest_roll:
+            highest_roll = roll
+    return highest_roll
