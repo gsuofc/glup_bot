@@ -97,6 +97,11 @@ async def ping(interaction: discord.Interaction):
     # Always use interaction.response.send_message for slash commands
     await interaction.response.send_message(f"Pong! {round(bot.latency * 1000)}ms")
 
+@bot.tree.command(name="time", description="Check the bot's time")
+async def ping(interaction: discord.Interaction):
+    # Always use interaction.response.send_message for slash commands
+    await interaction.response.send_message(f"The time is {datetime.now()}")
+
 @bot.tree.command(name="glup", description="Glup command")
 async def glup(interaction: discord.Interaction):
     # Always use interaction.response.send_message for slash commands
