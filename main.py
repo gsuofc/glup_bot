@@ -124,7 +124,11 @@ async def tate(interaction: discord.Interaction):
 async def neofetch(interaction: discord.Interaction):
     # Run the neofetch command and capture its output
     import subprocess
-    result = subprocess.run(['fastfetch', '--pipe'], capture_output=True, text=True)
+    result = subprocess.run([
+        "fastfetch",
+        "--logo", "none",
+        "--color", "none"
+    ], capture_output=True, text=True)
     output = result.stdout
     # Send as embed to avoid message length issues
     embed = discord.Embed(title="System Information", description=f"```\n{output}\n```", color=0x00ff00)
