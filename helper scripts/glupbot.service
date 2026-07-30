@@ -1,0 +1,25 @@
+[Unit]
+Description=Discord Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+User=ENTER YOUR USER
+WorkingDirectory=/home/user/discord-bot
+
+ExecStart=/home/user/glup_bot/start.sh
+
+Restart=always
+RestartSec=5
+
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Optional logging
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
