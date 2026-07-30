@@ -362,7 +362,7 @@ async def fish(interaction: discord.Interaction):
     # We have a fish, now we roll for rarity
     boost = 1
     if whenitis906():
-        boost = 3
+        boost = 5
 
     rarity_roll = fishing.roll_rarity(boost)
 
