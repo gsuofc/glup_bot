@@ -69,6 +69,17 @@ async def on_ready():
     except Exception as e:
         print(f"Failed to sync commands: {e}")
 
+    for resource in (
+        "punkt",
+        "punkt_tab",
+        "averaged_perceptron_tagger",
+        "averaged_perceptron_tagger_eng",
+    ):
+        try:
+            nltk.download(resource, quiet=True)
+        except Exception:
+            pass
+
 @bot.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.text_channels, name='general')
@@ -210,9 +221,6 @@ async def poll(ctx, *, question):
 @bot.tree.context_menu(name="Duskullify")
 async def duskullify(interaction: discord.Interaction, message: discord.Message):
     await interaction.response.defer()
-
-    nltk.download('punkt')
-    nltk.download('averaged_perceptron_tagger')
 
     # Inline function - because we dont really need this elsewhere
     def replace_nouns_nltk(text, replacement_word="[NOUN]"):
