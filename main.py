@@ -12,6 +12,9 @@ import logging
 from dotenv import load_dotenv
 import os
 
+import nltk
+from nltk.tokenize import word_tokenize
+
 import fishing
 
 load_dotenv()
@@ -206,8 +209,29 @@ async def poll(ctx, *, question):
 
 @bot.tree.context_menu(name="Duskullify")
 async def duskullify(interaction: discord.Interaction, message: discord.Message):
-    await interaction.response.send_message(
-        f"Thank you for reporting! Sent message: '{message.content}' by {message.author.mention}", 
+    await interaction.response.defer()
+
+    nltk.download('punkt')
+    nltk.download('averaged_perceptron_tagger')
+
+    # Inline function - because we dont really need this elsewhere
+    def replace_nouns_nltk(text, replacement_word="[NOUN]"):
+        tokens = word_tokenize(text)
+        tagged = nltk.pos_tag(tokens)
+        
+        result = []
+        for word, tag in tagged:
+            # NLTK noun tags start with 'NN' (NN, NNS, NNP, NNPS)
+            if tag.startswith('NN'):
+                result.append(replacement_word)
+            else:
+                result.append(word)
+                
+        return " ".join(result)
+
+    
+    await interaction.followup.send(
+        replace_nouns_nltk(message.content, "Duskull"), 
         ephemeral=True
     )
 
