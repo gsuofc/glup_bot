@@ -237,6 +237,13 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
                 
         return " ".join(result)
 
+    if not message.content.strip():
+        await interaction.followup.send(
+            "That message doesn't contain any text. (Make sure it isn't an embed`)",
+            ephemeral=True,
+        )
+        return
+
     
     await interaction.followup.send(
         replace_nouns_nltk(message.content, "Duskull"), 
