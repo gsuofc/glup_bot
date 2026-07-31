@@ -204,7 +204,12 @@ async def poll(ctx, *, question):
     await poll_message.add_reaction('👍')
     await poll_message.add_reaction('👎')
 
-
+@bot.tree.context_menu(name="Duskullify")
+async def duskullify(interaction: discord.Interaction, message: discord.Message):
+    await interaction.response.send_message(
+        f"Thank you for reporting! Sent message: '{message.content}' by {message.author.mention}", 
+        ephemeral=True
+    )
 
 
 """
