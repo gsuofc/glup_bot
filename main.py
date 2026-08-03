@@ -54,6 +54,14 @@ def whenitis906():
     # 12 PM is hour 12 in 24-hour format, with 0 minutes
     return (now.hour == 9 or now.hour == 9+12) and now.minute == 6
 
+def fishing_fridays():
+    now = datetime.now()
+    return now.astimezone().weekday() == 4  
+
+def big_catch_monday():
+    now = datetime.now()
+    return now.astimezone().weekday() == 0  
+
 @bot.event
 async def on_ready():
 
@@ -400,13 +408,26 @@ async def fish(interaction: discord.Interaction):
 
     fish_roll = secrets.SystemRandom().random()
 
-    (fish_rolled,odds) = fish_odds_table.get_fish_using_roll(fish_roll)
+    big_fish_boost = 1
+    if big_catch_monday():
+        big_fish_boost = 2
+
+    lowest_odds = 1
+    fish_rolled = None
+    for i in range(0, big_fish_boost):
+        (fish_candidate,odds) = fish_odds_table.get_fish_using_roll(fish_roll)
+        if odds < lowest_odds:
+            lowest_odds = odds
+            fish_rolled = fish_candidate
+
     fish_id = fish_rolled["fish_id"]
 
     # We have a fish, now we roll for rarity
     boost = 1
     if whenitis906():
-        boost = 5
+        boost = 6
+    if fishing_fridays():
+        boost*= 2
 
     rarity_roll = fishing.roll_rarity(boost)
 
@@ -431,6 +452,10 @@ async def fish(interaction: discord.Interaction):
 
     if whenitis906():
         biggest_size_message+="\nWhen it is 9:06: :POG:"
+    if fishing_fridays():
+        biggest_size_message+="\nFishing Fridays: 2x Size Boost!"
+    if big_catch_monday():
+        biggest_size_message+="\nBig Catch Monday: 2x Fish Boost!"
 
     new_quantity = last_quantity + 1
     new_biggest_weight = last_biggest_weight
