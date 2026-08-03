@@ -410,7 +410,7 @@ async def fish(interaction: discord.Interaction):
 
     rarity_roll = fishing.roll_rarity(boost)
 
-    rank = fishing.convert_roll_to_rank(rarity_roll)
+    (rank, hue) = fishing.convert_roll_to_rank(rarity_roll)
     size = fishing.convert_roll_to_weight(rarity_roll,fish_rolled["ave_size"])
 
     # Now update the fish stats
@@ -451,7 +451,7 @@ async def fish(interaction: discord.Interaction):
     embed = discord.Embed(
         title="Caught Fish",
         description=f"Fished {fish_rolled["fish_name"]}!\nSize: {size:.3f}\nRank: {rank}\n{biggest_size_message}",
-        color=fishing.get_discord_embed_color(rarity_roll,0,1)
+        color=fishing.get_discord_embed_color(hue,0,1)
     )
     
     embed.set_image(url="attachment://image.png")
@@ -585,7 +585,7 @@ async def add_fish(interaction: discord.Interaction, island_id: int, fish_roll: 
 
     # Fish and rarity rolls are done as args
 
-    rank = fishing.convert_roll_to_rank(rarity_roll)
+    (rank, hue) = fishing.convert_roll_to_rank(rarity_roll)
     size = fishing.convert_roll_to_weight(rarity_roll,fish_rolled["ave_size"])
 
     file_name = fish_rolled["emote_file"]
@@ -593,7 +593,7 @@ async def add_fish(interaction: discord.Interaction, island_id: int, fish_roll: 
     embed = discord.Embed(
         title="Simulated Fish",
         description=f"Simulation rolled {fish_rolled["fish_name"]}!\nSize: {size:.3f}\nRank: {rank}\nNote: This will not be counted as to your profile",
-        color=fishing.get_discord_embed_color(rarity_roll,0,1)
+        color=fishing.get_discord_embed_color(hue,0,1)
     )
     
     embed.set_image(url="attachment://image.png")

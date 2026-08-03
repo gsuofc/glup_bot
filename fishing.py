@@ -225,19 +225,19 @@ class fish_roller:
 # Non DB Helper functions
 def convert_roll_to_rank(roll):
     if roll < 0.005:
-        return "F"
+        return ("F", 0)
     elif roll < 0.02:
-        return "E"
-    elif roll < 0.40:
-        return "D"
-    elif roll < 0.70:
-        return "C"
+        return ("E", 0.15)
+    elif roll < 0.60:
+        return ("D", 0.3)
+    elif roll < 0.90:
+        return ("C", 0.45)
     elif roll < 0.98:
-        return "B"
+        return ("B", 0.5)
     elif roll < 0.995:
-        return "A"
+        return ("A", 0.63)
     else:
-        return "A+"
+        return ("A+", 0.75)
 
 def convert_roll_to_weight(roll,average_weight):
     sigma = average_weight * 0.25
@@ -252,10 +252,7 @@ def get_discord_embed_color(val, min_val, max_val):
     norm = (val - min_val) / (max_val - min_val)
     norm = max(0.0, min(1.0, norm))
 
-    if norm <= 0.98:
-        hue = (norm / 0.98) * 0.65
-    else:
-        hue = 0.65 + ((norm - 0.98) / 0.02) * 0.17
+    hue = norm
 
     # Convert hue to rgb
     r, g, b = colorsys.hsv_to_rgb(hue, 1.0, 1.0)
