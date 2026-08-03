@@ -56,11 +56,11 @@ def whenitis906():
 
 def fishing_fridays():
     now = datetime.now()
-    return now.astimezone().weekday() == 4  
+    return now.astimezone().weekday() == 4 and now.hour >= 6 and now.hour <= 10
 
 def big_catch_monday():
     now = datetime.now()
-    return now.astimezone().weekday() == 0  
+    return now.astimezone().weekday() == 0 and now.hour >= 6 and now.hour <= 10
 
 @bot.event
 async def on_ready():
