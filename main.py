@@ -431,6 +431,10 @@ async def fish(interaction: discord.Interaction):
 
     rarity_roll = fishing.roll_rarity(boost)
 
+    # If the user has a multiple of 5000 catches, give them a free A+ catch
+    if user_catches>0 and (user_catches+1)%5000==0:
+        rarity_roll = 0.995 + (0.005 * secrets.SystemRandom().random())
+
     (rank, hue) = fishing.convert_roll_to_rank_and_hue(rarity_roll)
     size = fishing.convert_roll_to_weight(rarity_roll,fish_rolled["ave_size"])
 
