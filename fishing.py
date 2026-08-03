@@ -223,21 +223,25 @@ class fish_roller:
 
 
 # Non DB Helper functions
-def convert_roll_to_rank(roll):
+def convert_roll_to_rank_and_hue(roll):
     if roll < 0.005:
         return ("F", 0)
     elif roll < 0.02:
-        return ("E", 0.15)
+        return ("E", 0.07)
     elif roll < 0.60:
-        return ("D", 0.3)
+        return ("D", 0.15)
     elif roll < 0.90:
-        return ("C", 0.45)
+        return ("C", 0.32)
     elif roll < 0.98:
         return ("B", 0.5)
     elif roll < 0.995:
         return ("A", 0.63)
     else:
         return ("A+", 0.75)
+
+def convert_roll_to_rank(roll):
+    (rank, _) = convert_roll_to_rank_and_hue(roll)
+    return rank
 
 def convert_roll_to_weight(roll,average_weight):
     sigma = average_weight * 0.25

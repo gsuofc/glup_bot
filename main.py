@@ -410,7 +410,7 @@ async def fish(interaction: discord.Interaction):
 
     rarity_roll = fishing.roll_rarity(boost)
 
-    (rank, hue) = fishing.convert_roll_to_rank(rarity_roll)
+    (rank, hue) = fishing.convert_roll_to_rank_and_hue(rarity_roll)
     size = fishing.convert_roll_to_weight(rarity_roll,fish_rolled["ave_size"])
 
     # Now update the fish stats
@@ -585,7 +585,7 @@ async def add_fish(interaction: discord.Interaction, island_id: int, fish_roll: 
 
     # Fish and rarity rolls are done as args
 
-    (rank, hue) = fishing.convert_roll_to_rank(rarity_roll)
+    (rank, hue) = fishing.convert_roll_to_rank_and_hue(rarity_roll)
     size = fishing.convert_roll_to_weight(rarity_roll,fish_rolled["ave_size"])
 
     file_name = fish_rolled["emote_file"]
