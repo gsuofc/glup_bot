@@ -327,6 +327,25 @@ async def erudition(ctx):
     )
     await ctx.send(embed=embed)
 
+@bot.command()
+@commands.is_owner()
+async def set_erudition(ctx, member: discord.Member, amount: int):
+    # First, check to see if the user has a profile, if not create one
+    user_profile = await fishing.get_user_profile(member.id)
+    if not user_profile:
+        await fishing.create_user_profile(member.id)
+        user_profile = await fishing.get_user_profile(member.id)
+
+    # Now, get or create the user leveling profile
+    user_level = await leveling.get_or_create_user_level(user_profile["user_id"])
+    
+    # Update the user's experience to the specified amount
+    await leveling.update_user_experience(user_profile["user_id"], amount)
+    
+    # Calculate the new level based on the updated experience
+    new_level = leveling.calculate_level(amount)
+
+    await ctx.send(f"Set {member.mention}'s erudition to {amount}. New level is {new_level}.")
 
 """
 Fishing Minigame Commands
