@@ -16,6 +16,7 @@ import nltk
 from nltk.tokenize import word_tokenize
 
 import fishing
+import leveling
 
 load_dotenv()
 token = os.getenv('DISCORD_TOKEN')
@@ -66,6 +67,7 @@ def big_catch_monday():
 async def on_ready():
 
     await fishing.init_db()
+    await leveling.init_leveling_db()
 
     print(f'Logged in as {bot.user.name} ({bot.user.id})')
     print('------')
@@ -257,6 +259,44 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
         replace_nouns_nltk(message.content, "Duskull"), 
         ephemeral=True
     )
+
+@bot.hybrid_command(name="elevate", description="Elevate your erudition!")
+async def elevate(ctx):
+    # First, check to see if the user has a profile, if not create one
+    user_profile = await fishing.get_user_profile(ctx.author.id)
+    if not user_profile:
+        await fishing.create_user_profile(ctx.author.id)
+        user_profile = await fishing.get_user_profile(ctx.author.id)
+
+    # Now, get or create the user leveling profile
+    user_level = await leveling.get_or_create_user_level(user_profile["user_id"])
+    user_experience = user_level["experience"]
+    user_level = leveling.calculate_level(user_experience)
+
+
+    exp_roll = secrets.SystemRandom().random()*user_level*10
+    new_experience = user_experience + int(exp_roll)
+
+    new_level = leveling.calculate_level(new_experience)
+
+    level_progression_message = "Max Level Achieved!\n"
+    this_level_exp = leveling.calculate_experience_for_level(user_level)
+    if user_level < 99:  # Assuming 99 is the max level
+        next_level_exp = leveling.calculate_experience_for_level(user_level + 1)
+        user_level_difference = new_experience - this_level_exp
+        next_level_difference = next_level_exp - this_level_exp
+        level_progression_message = f"Level Progress: {user_level_difference}/{next_level_difference}\n"
+
+    if new_level > user_level:
+        level_progression_message += f"Level up! You are now level {new_level}!"
+
+    await leveling.update_user_experience(user_profile["user_id"], new_experience)
+    embed = discord.Embed(
+        title="Erudition Elevated!",
+        description=f"You gained {int(exp_roll)} erudition points!\n{level_progression_message}",
+        color=discord.Color.purple()
+    )
+    await ctx.send(embed=embed)
 
 
 """
