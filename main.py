@@ -63,6 +63,10 @@ def big_catch_monday():
     now = datetime.now()
     return now.astimezone().weekday() == 0 and now.hour >= 6 and now.hour <= 10
 
+def double_exp_saturdays():
+    now = datetime.now()
+    return now.astimezone().weekday() == 5
+
 @bot.event
 async def on_ready():
 
@@ -274,7 +278,11 @@ async def elevate(ctx):
     user_level = leveling.calculate_level(user_experience)
 
 
-    exp_roll = (secrets.SystemRandom().random()*(user_level+10))+1
+    exp_roll = (secrets.SystemRandom().random()*(user_level*2+10))+1
+    if double_exp_saturdays():
+        exp_roll *= 2
+    if whenitis906():
+        exp_roll *= 5
     new_experience = user_experience + int(exp_roll)
 
     new_level = leveling.calculate_level(new_experience)
@@ -285,10 +293,15 @@ async def elevate(ctx):
         next_level_exp = leveling.calculate_experience_for_level(user_level + 1)
         user_level_difference = new_experience - this_level_exp
         next_level_difference = next_level_exp - this_level_exp
-        level_progression_message = f"Level Progress: {user_level_difference}/{next_level_difference}\n"
+        level_progression_message = f"Level {user_level}: {user_level_difference}/{next_level_difference}\n"
 
     if new_level > user_level:
-        level_progression_message = f"Level up! You are now level {new_level}!"
+        level_progression_message = f"Level up! {user_level} -> {new_level}"
+
+    if double_exp_saturdays():
+        level_progression_message += "\nDouble EXP Saturday: 2x EXP Boost!"
+    if whenitis906():
+        level_progression_message += "\nWhen It's 9:06: :POG:"
 
     await leveling.update_user_experience(user_profile["user_id"], new_experience)
     embed = discord.Embed(
