@@ -322,7 +322,7 @@ async def erudition(ctx):
 
     embed = discord.Embed(
         title="Erudition Profile",
-        description=f"Level: {user_level} ({user_experience} erudition)\n{level_progression_message}",
+        description=f"Level: {user_level} ({user_experience} total erudition)\n{level_progression_message}",
         color=discord.Color.blue()
     )
     await ctx.send(embed=embed)
