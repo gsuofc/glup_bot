@@ -288,13 +288,42 @@ async def elevate(ctx):
         level_progression_message = f"Level Progress: {user_level_difference}/{next_level_difference}\n"
 
     if new_level > user_level:
-        level_progression_message += f"Level up! You are now level {new_level}!"
+        level_progression_message = f"Level up! You are now level {new_level}!"
 
     await leveling.update_user_experience(user_profile["user_id"], new_experience)
     embed = discord.Embed(
         title="Erudition Elevated!",
         description=f"You gained {int(exp_roll)} erudition points!\n{level_progression_message}",
         color=discord.Color.purple()
+    )
+    await ctx.send(embed=embed)
+
+@bot.hybrid_command(name="erudition", description="Check your erudition!")
+async def erudition(ctx):
+    # First, check to see if the user has a profile, if not create one
+    user_profile = await fishing.get_user_profile(ctx.author.id)
+    if not user_profile:
+        await fishing.create_user_profile(ctx.author.id)
+        user_profile = await fishing.get_user_profile(ctx.author.id)
+
+    # Now, get or create the user leveling profile
+    user_level = await leveling.get_or_create_user_level(user_profile["user_id"])
+    user_experience = user_level["experience"]
+    user_level = leveling.calculate_level(user_experience)
+
+    this_level_exp = leveling.calculate_experience_for_level(user_level)
+    next_level_exp = leveling.calculate_experience_for_level(user_level + 1) if user_level < 99 else None
+
+    level_progression_message = "Max Level Achieved!\n"
+    if next_level_exp is not None:
+        user_level_difference = user_experience - this_level_exp
+        next_level_difference = next_level_exp - this_level_exp
+        level_progression_message = f"Level Progress: {user_level_difference}/{next_level_difference}\n"
+
+    embed = discord.Embed(
+        title="Erudition Profile",
+        description=f"Level: {user_level} ({user_experience} erudition)\n{level_progression_message}",
+        color=discord.Color.blue()
     )
     await ctx.send(embed=embed)
 
