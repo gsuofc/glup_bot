@@ -274,7 +274,7 @@ async def elevate(ctx):
     user_level = leveling.calculate_level(user_experience)
 
 
-    exp_roll = secrets.SystemRandom().random()*user_level*10
+    exp_roll = (secrets.SystemRandom().random()*user_level*10)+1
     new_experience = user_experience + int(exp_roll)
 
     new_level = leveling.calculate_level(new_experience)
