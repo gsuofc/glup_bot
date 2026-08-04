@@ -292,8 +292,8 @@ async def elevate(ctx):
 
     await leveling.update_user_experience(user_profile["user_id"], new_experience)
     embed = discord.Embed(
-        title="Erudition Elevated!",
-        description=f"You gained {int(exp_roll)} erudition points!\n{level_progression_message}",
+        title="Erudition Elevated",
+        description=f"You gained {int(exp_roll)} erudition points\n{level_progression_message}",
         color=discord.Color.purple()
     )
     await ctx.send(embed=embed)
