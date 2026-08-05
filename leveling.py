@@ -1,3 +1,5 @@
+import math
+
 import aiosqlite
 from fishing import DB_FILE
 
@@ -150,3 +152,17 @@ def calculate_level(experience):
 
 def calculate_experience_for_level(current_level):
     return level_progresion[current_level]
+
+def calculate_experience_for_level_new(current_level):
+    if current_level < 2:
+        return 0
+    summation = 0
+    for lvl in range(1, current_level + 1):
+        value = int(lvl + 300 * (2 ** (lvl / 7)))
+        summation += math.floor(value)
+    return int(math.floor(summation / 4))
+
+
+for i in range(1, 100):
+    exp = calculate_experience_for_level_new(i)
+    print(f"Level {i}: {exp} XP")
