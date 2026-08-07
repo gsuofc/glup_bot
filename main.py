@@ -3,6 +3,7 @@ import json
 import random
 import secrets
 import sys
+from urllib import response
 
 import aiohttp
 import discord
@@ -266,8 +267,30 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
 
 @bot.hybrid_command(name="itwouldbesoawesome", description="Get a random mario enemy image")
 async def itwouldbesoawesome(ctx):
-    mariorng = discord.Embed(title="Your Random Mario Enemy", url="https://perchance.org/149g9la4l8", colour=discord.Colour.random())
-    await ctx.send(embed=mariorng)
+    ctx.defer()
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get("https://perchance.org/149g9la4l8") as response:
+                if response.status != 200:
+                    await ctx.followup.send(f"Error accessing API - responded with status: {response.status}")
+                    return
+                
+                enemy_result = await response.text().strip() # We might want to process better?
+
+                if not enemy_result:
+                    await ctx.followup.send("Error accessing API - Empty Result")
+                    return
+
+                embed = discord.Embed(
+                    title="random mario enemy:",
+                    description=enemy_result,
+                    color=discord.Color.random()
+                )
+                await ctx.followup.send(embed=embed)
+
+    except Exception as e:
+        await ctx.followup.send(f"Error accessing API - {str(e)}")
+
 
 @bot.hybrid_command(name="elevate", description="Elevate your erudition!")
 async def elevate(ctx):
