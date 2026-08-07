@@ -278,7 +278,8 @@ async def itwouldbesoawesome(ctx):
                     await ctx.send(f"Error accessing API - responded with status: {response.status}")
                     return
                 
-                enemy_result = await response.text().strip() # We might want to process better?
+                enemy_result = await response.text()
+                enemy_result = enemy_result.strip()
 
                 if not enemy_result:
                     await ctx.send("Error accessing API - Empty Result")
