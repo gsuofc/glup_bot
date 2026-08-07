@@ -272,13 +272,13 @@ async def itwouldbesoawesome(ctx):
         async with aiohttp.ClientSession() as session:
             async with session.get("https://perchance.org/149g9la4l8") as response:
                 if response.status != 200:
-                    await ctx.followup.send(f"Error accessing API - responded with status: {response.status}")
+                    await ctx.send(f"Error accessing API - responded with status: {response.status}")
                     return
                 
                 enemy_result = await response.text().strip() # We might want to process better?
 
                 if not enemy_result:
-                    await ctx.followup.send("Error accessing API - Empty Result")
+                    await ctx.send("Error accessing API - Empty Result")
                     return
 
                 embed = discord.Embed(
@@ -286,10 +286,10 @@ async def itwouldbesoawesome(ctx):
                     description=enemy_result,
                     color=discord.Color.random()
                 )
-                await ctx.followup.send(embed=embed)
+                await ctx.send(embed=embed)
 
     except Exception as e:
-        await ctx.followup.send(f"Error accessing API - {str(e)}")
+        await ctx.send(f"Error accessing API - {str(e)}")
 
 
 @bot.hybrid_command(name="elevate", description="Elevate your erudition!")
