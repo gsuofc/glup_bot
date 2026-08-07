@@ -268,8 +268,11 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
 @bot.hybrid_command(name="itwouldbesoawesome", description="Get a random mario enemy image")
 async def itwouldbesoawesome(ctx):
     ctx.defer()
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+    }
     try:
-        async with aiohttp.ClientSession() as session:
+        async with aiohttp.ClientSession(headers=headers) as session:
             async with session.get("https://perchance.org/149g9la4l8") as response:
                 if response.status != 200:
                     await ctx.send(f"Error accessing API - responded with status: {response.status}")
