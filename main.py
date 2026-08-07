@@ -265,9 +265,9 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
     )
 
 @bot.hybrid_command(name="itwouldbesoawesome", description="Get a random mario enemy image")
-async def itwouldbesoawesome(interaction: discord.Interaction):
+async def itwouldbesoawesome(ctx):
     mariorng = discord.Embed(title="Your Random Mario Enemy", url="https://perchance.org/149g9la4l8", colour=discord.Colour.random())
-    await interaction.response.send_message(embed=mariorng)
+    await ctx.send(embed=mariorng)
 
 @bot.hybrid_command(name="elevate", description="Elevate your erudition!")
 async def elevate(ctx):
