@@ -280,6 +280,8 @@ async def itwouldbesoawesome(ctx):
                 
                 enemy_result = await response.text()
                 enemy_result = enemy_result.strip()
+                if len(enemy_result) > 4000:
+                    enemy_result = enemy_result[:4000]
 
                 if not enemy_result:
                     await ctx.send("Error accessing API - Empty Result")
