@@ -264,6 +264,11 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
         ephemeral=True
     )
 
+@bot.hybrid_command(name="itwouldbesoawesome", description="Get a random mario enemy image")
+async def itwouldbesoawesome(interaction: discord.Interaction):
+    mariorng = discord.Embed(title="Your Random Mario Enemy", url="https://perchance.org/149g9la4l8", colour=discord.Colour.random())
+    await interaction.response.send_message(embed=mariorng)
+
 @bot.hybrid_command(name="elevate", description="Elevate your erudition!")
 async def elevate(ctx):
     # First, check to see if the user has a profile, if not create one
