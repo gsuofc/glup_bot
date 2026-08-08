@@ -286,7 +286,16 @@ async def duskull(ctx):
                 await ctx.send(f"Error accessing API - responded with status: {response.status}")
                 return
             name_result = await response.text()
-            await ctx.send(name_result)
+            name_json = json.loads(name_result)
+            first_name = name_json["results"][0]["name"]["first"]
+
+            embed = discord.Embed(
+                title="Duskull generated!",
+                description=f"say hello to {first_name}!",
+                color=discord.Color.purple()
+            )
+            embed.set_image(url=duskull_image)
+            await ctx.send(embed=embed) 
 
 @bot.hybrid_command(name="itwouldbesoawesome", description="Get a random mario enemy image")
 async def itwouldbesoawesome(ctx):
