@@ -265,6 +265,29 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
         ephemeral=True
     )
 
+@bot.hybrid_command(name="duskull", description="Get a duskull!!!!!!!!")
+async def duskull(ctx):
+    ctx.defer()
+    shiny_roll = secrets.SystemRandom().randint(1, 8192)
+
+    duskull_image = "https://img.pokemondb.net/sprites/black-white/normal/duskull.png"
+    if shiny_roll == 1:
+        duskull_image = "https://img.pokemondb.net/sprites/black-white/shiny/duskull.png"
+
+    random_name_api = "https://randomuser.me/api/?inc=name"
+
+    """
+    {"results":[{"name":{"title":"Mr","first":"Ümit","last":"Aşıkoğlu"}}],"info":{"seed":"8911778d7db69fa5","results":1,"page":1,"version":"1.4"}}
+    """
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get("random_name_api") as response:
+            if response.status != 200:
+                await ctx.send(f"Error accessing API - responded with status: {response.status}")
+                return
+
+            print(await response.text())
+
 @bot.hybrid_command(name="itwouldbesoawesome", description="Get a random mario enemy image")
 async def itwouldbesoawesome(ctx):
     ctx.defer()
