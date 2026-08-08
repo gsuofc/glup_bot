@@ -274,7 +274,7 @@ async def duskull(ctx):
     if shiny_roll == 1:
         duskull_image = "https://img.pokemondb.net/sprites/black-white/shiny/duskull.png"
 
-    random_name_api = "https://randomuser.me/api/?inc=name&nat=us,gb,ca,au,nz,ie,fr,de,es,it,nl,ch,no,dk,fi,se,br,mx,tr"
+    random_name_api = "https://randomuser.me/api/?inc=name&nat=us,gb,ca,au,nz,ie,fr,de,es,nl,ch,no,dk,fi,br,mx,tr"
 
     """
     {"results":[{"name":{"title":"Mr","first":"Ümit","last":"Aşıkoğlu"}}],"info":{"seed":"8911778d7db69fa5","results":1,"page":1,"version":"1.4"}}
