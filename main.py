@@ -285,8 +285,8 @@ async def duskull(ctx):
             if response.status != 200:
                 await ctx.send(f"Error accessing API - responded with status: {response.status}")
                 return
-
-            print(await response.text())
+            name_result = await response.text()
+            await ctx.send(name_result)
 
 @bot.hybrid_command(name="itwouldbesoawesome", description="Get a random mario enemy image")
 async def itwouldbesoawesome(ctx):
