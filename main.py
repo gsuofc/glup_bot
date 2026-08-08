@@ -281,7 +281,7 @@ async def duskull(ctx):
     """
 
     async with aiohttp.ClientSession() as session:
-        async with session.get("random_name_api") as response:
+        async with session.get(random_name_api) as response:
             if response.status != 200:
                 await ctx.send(f"Error accessing API - responded with status: {response.status}")
                 return
