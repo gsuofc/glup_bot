@@ -123,7 +123,9 @@ async def on_message(message):
 
     #check to see if it is in the git channel specifically on my server
     if message.guild.name == "globalpositioningsystem's server" and message.channel.name == "glup-git":
-        await message.channel.send(f'Hello, {message.author.mention}!')
+        log_to_server(f"Git change detected, stopping...", channel_name='glup-logs')
+        await bot.close()
+        sys.exit(0)
 
 
     await bot.process_commands(message)
