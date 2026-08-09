@@ -127,7 +127,6 @@ async def on_message(message):
         await bot.close()
         sys.exit(0)
 
-
     await bot.process_commands(message)
 
 @bot.tree.command(name="ping", description="Check the bot's response time")
