@@ -4,6 +4,7 @@ import random
 import secrets
 import sys
 from urllib import response
+import subprocess
 
 import aiohttp
 import discord
@@ -119,6 +120,11 @@ async def on_message(message):
     #log_to_server(f'Random roll: {rng_roll}', channel_name='glup-logs')
     if rng_roll > 95 and message.content.startswith('why'):
         await message.channel.send(f'because bread tastes better than key!!!!!!!!!!')
+
+    #check to see if it is in the git channel specifically on my server
+    if message.server.name == "globalpositioningsystem's server" and message.channel.name == "glup-git":
+        await message.channel.send(f'Hello, {message.author.mention}!')
+
 
     await bot.process_commands(message)
 
@@ -333,6 +339,11 @@ async def itwouldbesoawesome(ctx):
     except Exception as e:
         await ctx.send(f"Error accessing API - {str(e)}")
 
+@bot.hybrid_command(name="version", description="Get the version of the bot, using git describe")
+async def version(ctx):
+    git_describe_command = ["git", "describe", "--tags", "--always"]
+    git_describe_process = subprocess.run(git_describe_command, capture_output=True, text=True)
+    await ctx.send(f"Bot Version: {git_describe_process.stdout.strip()}")
 
 @bot.hybrid_command(name="elevate", description="Elevate your erudition!")
 async def elevate(ctx):
