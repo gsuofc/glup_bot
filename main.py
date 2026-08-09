@@ -99,14 +99,15 @@ async def on_ready():
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.text_channels, name='general')
     if channel:
-        await channel.send(f'Welcome to the server, {member.mention}!')
+        pass
+        #await channel.send(f'Welcome to the server, {member.mention}!') # We dont want to do this anymore
 
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
         return
 
-    if message.content.startswith('hello'):
+    if message.content.startswith('hello glup'):
         #await message.delete()
         await message.channel.send(f'Hello, {message.author.mention}!')
 
@@ -187,6 +188,7 @@ async def random_image(interaction: discord.Interaction):
 
 
 @bot.command()
+@commands.is_owner()
 async def assign(ctx):
     # Check if the role exists in the guild
     role = discord.utils.get(ctx.guild.roles, name='test')
@@ -197,6 +199,7 @@ async def assign(ctx):
 
 
 @bot.command()
+@commands.is_owner()
 async def remove(ctx):
     # Check if the role exists in the guild
     role = discord.utils.get(ctx.guild.roles, name='test')
@@ -227,6 +230,7 @@ async def stop(ctx):
     sys.exit(0)
 
 @bot.command()
+@commands.is_owner()
 async def poll(ctx, *, question):
     embed = discord.Embed(title="Poll", description=question, color=0x00ff00)
     poll_message = await ctx.send(embed=embed)
@@ -269,7 +273,6 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
 async def duskull(ctx):
     ctx.defer()
     shiny_roll = secrets.SystemRandom().randint(1, 8192)
-    log_to_server(f'Duskull generated for {ctx.author.name} debug!', channel_name='glup-logs')
     duskull_image = "https://img.pokemondb.net/sprites/black-white/normal/duskull.png"
     if shiny_roll == 1:
         duskull_image = "https://img.pokemondb.net/sprites/black-white/shiny/duskull.png"
