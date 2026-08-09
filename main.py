@@ -121,7 +121,7 @@ async def on_message(message):
 
     # if this is a DM to the bot, send message to a specific channel in the server
     if isinstance(message.channel, discord.DMChannel):
-        log_to_server(f'DM from {message.author}: {message.content}', channel_name='glup-responses')
+        await log_to_server_async(f'DM from {message.author}: {message.content}', channel_name='glup-responses')
 
     rng_roll = random.randint(1, 100)
     #log_to_server(f'Random roll: {rng_roll}', channel_name='glup-logs')
