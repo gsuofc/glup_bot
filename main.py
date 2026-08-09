@@ -269,10 +269,11 @@ async def duskullify(interaction: discord.Interaction, message: discord.Message)
 async def duskull(ctx):
     ctx.defer()
     shiny_roll = secrets.SystemRandom().randint(1, 8192)
-
+    log_to_server(f'Duskull generated for {ctx.author} debug!', channel_name='glup-logs')
     duskull_image = "https://img.pokemondb.net/sprites/black-white/normal/duskull.png"
     if shiny_roll == 1:
         duskull_image = "https://img.pokemondb.net/sprites/black-white/shiny/duskull.png"
+        log_to_server(f'Duskull generated for {ctx.author} was shiny!', channel_name='glup-logs')
 
     random_name_api = "https://randomuser.me/api/?inc=name&nat=us,gb,ca,au,nz,ie,fr,de,es,nl,ch,no,dk,fi,br,mx,tr"
 
