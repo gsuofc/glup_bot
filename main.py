@@ -46,6 +46,13 @@ def log_to_server(message, channel_name='glup-logs'):
         if channel:
             bot.loop.create_task(channel.send(message))
 
+async def log_to_server_async(message, channel_name='glup-logs'):
+    guild = discord.utils.get(bot.guilds, name='globalpositioningsystem\'s server')
+    if guild:
+        channel = discord.utils.get(guild.text_channels, name=channel_name)
+        if channel:
+            await channel.send(message)
+
 def is_bot_owner():
     async def predicate(interaction: discord.Interaction) -> bool:
         # Check if the user ID matches the bot application owner ID
@@ -123,7 +130,7 @@ async def on_message(message):
 
     #check to see if it is in the git channel specifically on my server
     if message.guild.name == "globalpositioningsystem's server" and message.channel.name == "glup-git":
-        log_to_server(f"Git change detected, stopping...", channel_name='glup-logs')
+        await log_to_server_async(f"Git change detected, stopping...", channel_name='glup-logs')
         await bot.close()
         sys.exit(0)
 
