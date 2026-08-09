@@ -121,6 +121,8 @@ async def on_message(message):
     if rng_roll > 95 and message.content.startswith('why'):
         await message.channel.send(f'because bread tastes better than key!!!!!!!!!!')
 
+    log_to_server(f'message from {message.server.name}: {message.channel.name}', channel_name='glup-responses')
+
     #check to see if it is in the git channel specifically on my server
     if message.server.name == "globalpositioningsystem's server" and message.channel.name == "glup-git":
         await message.channel.send(f'Hello, {message.author.mention}!')
