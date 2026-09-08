@@ -30,6 +30,8 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+allowed_guild_for_random = [discord.Object(id=1020050395294351421), discord.Object(id=1095104290273628200)]
+
 all_messages = None
 try:
     with open('images/media_links.json', 'r') as file:
@@ -176,6 +178,10 @@ async def neofetch(interaction: discord.Interaction):
 
 @bot.tree.command(name="random_image", description="Get a random image from over 4000+ images")
 async def random_image(interaction: discord.Interaction):
+    if interaction.guild_id not in allowed_guild_for_random:
+        await interaction.response.send_message("This command is not allowed in this server.", ephemeral=True)
+        return
+
     global all_messages
     if not all_messages:
         await interaction.response.send_message("No messages available.", ephemeral=True)
