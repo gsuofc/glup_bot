@@ -30,7 +30,7 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-allowed_guild_for_random = [discord.Object(id=1020050395294351421), discord.Object(id=1095104290273628200)]
+allowed_guild_for_random = [1020050395294351421, 1095104290273628200]
 
 all_messages = None
 try:
