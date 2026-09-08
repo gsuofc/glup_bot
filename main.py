@@ -30,7 +30,7 @@ intents.members = True
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
-allowed_guild_for_random = [1020050395294351421, 1095104290273628200]
+allowed_guild_for_special_commands = [1020050395294351421, 1095104290273628200,1117996912843423774]
 
 all_messages = None
 try:
@@ -168,6 +168,9 @@ async def tate(interaction: discord.Interaction):
 
 @bot.tree.command(name="neofetch", description="Get system information")
 async def neofetch(interaction: discord.Interaction):
+    if interaction.guild_id not in allowed_guild_for_special_commands:
+            await interaction.response.send_message("This command is not allowed in this server.", ephemeral=True)
+            return
     # Run the neofetch command and capture its output
     import subprocess
     result = subprocess.run(['neofetch', '--stdout','--disable', 'title'], capture_output=True, text=True)
@@ -178,7 +181,7 @@ async def neofetch(interaction: discord.Interaction):
 
 @bot.tree.command(name="random_image", description="Get a random image from over 4000+ images")
 async def random_image(interaction: discord.Interaction):
-    if interaction.guild_id not in allowed_guild_for_random:
+    if interaction.guild_id not in allowed_guild_for_special_commands:
         await interaction.response.send_message("This command is not allowed in this server.", ephemeral=True)
         return
 
@@ -357,7 +360,9 @@ async def itwouldbesoawesome(ctx):
 async def version(ctx):
     git_describe_command = ["git", "describe", "--tags", "--always"]
     git_describe_process = subprocess.run(git_describe_command, capture_output=True, text=True)
-    await ctx.send(f"Bot Version: {git_describe_process.stdout.strip()}")
+    git_commit_date_command = ["git", "log", "-1", "--format=%cd"]
+    git_commit_date_process = subprocess.run(git_commit_date_command, capture_output=True, text=True)
+    await ctx.send(f"Bot Version: {git_describe_process.stdout.strip()}\nCommit Date: {git_commit_date_process.stdout.strip()}")
 
 @bot.hybrid_command(name="elevate", description="Elevate your erudition!")
 async def elevate(ctx):
