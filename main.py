@@ -48,8 +48,8 @@ def log_to_server(message, channel_name='glup-logs'):
         if channel:
             bot.loop.create_task(channel.send(message))
 
-async def log_to_server_async(message, channel_name='glup-logs'):
-    guild = discord.utils.get(bot.guilds, name='globalpositioningsystem\'s server')
+async def log_to_server_async(message, channel_name='glup-logs', server_name='globalpositioningsystem\'s server'):
+    guild = discord.utils.get(bot.guilds, name=server_name)
     if guild:
         channel = discord.utils.get(guild.text_channels, name=channel_name)
         if channel:
@@ -124,6 +124,7 @@ async def on_message(message):
     # if this is a DM to the bot, send message to a specific channel in the server
     if isinstance(message.channel, discord.DMChannel):
         await log_to_server_async(f'DM from {message.author}: {message.content}', channel_name='glup-responses')
+        await log_to_server_async(f'DM from {message.author}: {message.content}', channel_name='moderator-only', server_name='Glups Quest Discord Server')
 
     rng_roll = random.randint(1, 100)
     #log_to_server(f'Random roll: {rng_roll}', channel_name='glup-logs')
